@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazing Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: aqua;
+            position: absolute;
+            left: 600px;
+            top: 200px;
+        }
+
+        #stopwatch {
+            font-size: 3em;
+            background-color: #444;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 50px auto;
+            width: 300px;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: center;
+        }
+
+        #start {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #stop {
+            background-color: #F44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #restart {
+            background-color: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="stopwatch">00:00:00</div>
+    <div id="controls">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+        <button id="restart">Restart</button>
+    </div>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let seconds = 0, minutes = 0, hours = 0, microseconds = 0;
+
+        function startStopwatch() {
+            if (!isRunning) {
+                timer = setInterval(updateStopwatch, 10); // Update every 10 milliseconds (microseconds).
+                isRunning = true;
+                document.getElementById('start').textContent = 'Pause';
+            } else {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('start').textContent = 'Resume';
+            }
+        }
+
+        function stopStopwatch() {
+            clearInterval(timer);
+            isRunning = false;
+            document.getElementById('start').textContent = 'Start';
+        }
+
+        function restartStopwatch() {
+            clearInterval(timer);
+            isRunning = false;
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            microseconds = 0;
+            document.getElementById('start').textContent = 'Start';
+            document.getElementById('stopwatch').textContent = '00:00:00';
+            document.getElementById('microseconds').textContent = '.000';
+        }
+
+        function updateStopwatch() {
+            microseconds++;
+            if (microseconds == 100) {
+                microseconds = 0;
+                seconds++;
+                if (seconds == 60) {
+                    seconds = 0;
+                    minutes++;
+                    if (minutes == 60) {
+                        minutes = 0;
+                        hours++;
+                    }
+                }
+            }
+            const timeString = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            const microsecondsString = `.${microseconds < 10 ? '00' : microseconds < 100 ? '0' : ''}${microseconds}`;
+            document.getElementById('stopwatch').textContent = timeString;
+            document.getElementById('microseconds').textContent = microsecondsString;
+        }
+
+        document.getElementById('start').addEventListener('click', startStopwatch);
+        document.getElementById('stop').addEventListener('click', stopStopwatch);
+        document.getElementById('restart').addEventListener('click', restartStopwatch);
+    </script>
+</body>
+</html>
